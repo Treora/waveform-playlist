@@ -65,6 +65,7 @@
     "clean": "rm -Rf dist && rm -Rf lib && rm -Rf styles",
     "styles": "mkdir -p styles && cp ghpages/_sass/_playlist.scss styles/playlist.scss",
     "compile": "babel src --out-dir lib",
+    "compile-watch": "babel src --out-dir lib -w",
     "jekyll": "jekyll build -s ghpages -d dist/waveform-playlist",
     "jekyll:dev": "jekyll build -s ghpages -d dist/waveform-playlist --watch &",
     "ghpages": "gh-pages --repo https://$GH_TOKEN@github.com/naomiaro/waveform-playlist.git -d dist/waveform-playlist",
