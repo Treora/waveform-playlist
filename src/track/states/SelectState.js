@@ -26,6 +26,8 @@ export default class {
   }
 
   mousedown(e) {
+    if (e.button !== 0) return; // Only respond to main mouse button
+
     e.preventDefault();
     this.active = true;
 
