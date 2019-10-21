@@ -791,7 +791,7 @@ export default class {
         this.lastSeeked = undefined;
         this.setState(this.getState());
 
-        this.playbackSeconds = 0;
+        this.playbackSeconds = this.getTimeSelection().start;
         this.draw(this.render());
       }, 0);
     }
