@@ -407,10 +407,11 @@ export default class {
       }
     }
 
+    const left = playbackX - 0.5; // subtract half the cursor's width to center it.
     const waveformChildren = [
       h('div.cursor', {
         attributes: {
-          style: `position: absolute; width: 1px; margin: 0; padding: 0; top: 0; left: ${playbackX}px; bottom: 0; z-index: 5;`,
+          style: `position: absolute; width: 1px; margin: 0; padding: 0; top: 0; left: ${left}px; bottom: 0; z-index: 5;`,
         },
       }),
     ];
