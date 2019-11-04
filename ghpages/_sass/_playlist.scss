@@ -165,6 +165,7 @@
     .annotation-box {
       border: 2px dashed grey;
       padding: 0 10px;
+      box-sizing: border-box;
 
       .resize-handle {
         background: grey;
