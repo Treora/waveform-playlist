@@ -181,8 +181,8 @@ class AnnotationList {
         const sampleRate = this.playlist.sampleRate;
         const pixPerSec = sampleRate / samplesPerPixel;
         const pixOffset = secondsToPixels(this.playlist.scrollLeft, samplesPerPixel, sampleRate);
-        const left = Math.floor((note.start * pixPerSec) - pixOffset);
-        const width = Math.ceil((note.end * pixPerSec) - (note.start * pixPerSec));
+        const left = note.start * pixPerSec - pixOffset;
+        const width = note.end * pixPerSec - note.start * pixPerSec;
 
         return h('div.annotation-box',
           {

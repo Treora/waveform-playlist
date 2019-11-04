@@ -7,7 +7,7 @@ export function secondsToSamples(seconds, sampleRate) {
 }
 
 export function samplesToPixels(samples, resolution) {
-  return Math.floor(samples / resolution);
+  return samples / resolution;
 }
 
 export function pixelsToSamples(pixels, resolution) {
@@ -19,5 +19,5 @@ export function pixelsToSeconds(pixels, resolution, sampleRate) {
 }
 
 export function secondsToPixels(seconds, resolution, sampleRate) {
-  return Math.ceil((seconds * sampleRate) / resolution);
+  return seconds * sampleRate / resolution;
 }
