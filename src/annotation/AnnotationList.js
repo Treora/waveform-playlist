@@ -181,10 +181,19 @@ class AnnotationList {
         const sampleRate = this.playlist.sampleRate;
         const pixPerSec = sampleRate / samplesPerPixel;
         const pixOffset = secondsToPixels(this.playlist.scrollLeft, samplesPerPixel, sampleRate);
-        const left = note.start * pixPerSec - pixOffset;
-        const width = note.end * pixPerSec - note.start * pixPerSec;
+        let left = note.start * pixPerSec - pixOffset;
+        let className;
+        let width;
+        if (note.end !== 0) {
+          className = '.segment-annotation';
+          width = note.end * pixPerSec - note.start * pixPerSec;
+        } else {
+          className = '.point-annotation';
+          width = 30;
+          left -= 15;
+        }
 
-        return h('div.annotation-box',
+        return h(`div.annotation-box${className}`,
           {
             attributes: {
               style: `position: absolute; height: 30px; width: ${width}px; left: ${left}px`,
