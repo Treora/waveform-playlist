@@ -193,24 +193,19 @@ class AnnotationList {
           left -= 15;
         }
 
-        return h('div.annotation-box',
+        return h(`a.annotation-box${className}`,
           {
             attributes: {
               style: `position: absolute; height: 30px; width: ${width}px; left: ${left}px`,
               'data-id': note.id,
+              title: note.lines && note.lines.join('\n'),
+              href: note.href,
             },
           },
           [
             this.renderResizeLeft(i),
             h('span.id',
               {
-                onclick: () => {
-                  if (this.playlist.isContinuousPlay) {
-                    this.playlist.ee.emit('play', this.annotations[i].start);
-                  } else {
-                    this.playlist.ee.emit('play', this.annotations[i].start, this.annotations[i].end);
-                  }
-                },
               },
               [
                 note.id,
