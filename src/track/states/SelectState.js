@@ -29,13 +29,31 @@ export default class {
 
     const overlayElement = downEvent.target;
 
-    // We will set up mouse event listeners on the whole body, to catch movements outside the track.
-    const body = overlayElement.ownerDocument.body;
+    // We will set mouse event listeners on the whole document to catch movements outside the track.
+    const docElement = overlayElement.ownerDocument.documentElement;
 
-    // Update selection on move. Treat 'leave' as a 'move' to ensure we set x to the very edge.
-    const handleMouseMoveOrLeave = moveEvent => {
+    // Update selection on move.
+    const handleMouseMove = moveEvent => {
       moveEvent.preventDefault();
       const x = moveEvent.clientX - overlayElement.getBoundingClientRect().left;
+      this.emitSelection(x);
+    };
+
+    const handleMouseLeave = leaveEvent => {
+      leaveEvent.preventDefault();
+
+      // In Firefox, if the cursor is held down and while dragging it out of the document, we will
+      // first get a leave and an enter event, and then no more move or up events; but we get a
+      // leave event when the button is released. Therefore we check if the button is still pressed.
+      if (!(enterEvent.buttons & 1)) { // Tests if the primary button is no longer pressed
+        // User released the button; end of interaction.
+        removeEventListeners();
+        // Don’t update the selection: it would jump unexpectedly as we did not receive move events.
+        return;
+      }
+
+      // Treat like a 'move' event.
+      const x = leaveEvent.clientX - overlayElement.getBoundingClientRect().left;
       this.emitSelection(x);
     };
 
@@ -55,16 +73,16 @@ export default class {
     };
 
     const removeEventListeners = () => {
-      body.removeEventListener('mousemove', handleMouseMoveOrLeave);
-      body.removeEventListener('mouseleave', handleMouseMoveOrLeave);
-      body.removeEventListener('mouseup', handleMouseUp);
-      body.removeEventListener('mouseenter', handleMouseEnter);
+      docElement.removeEventListener('mousemove', handleMouseMove);
+      docElement.removeEventListener('mouseleave', handleMouseLeave);
+      docElement.removeEventListener('mouseup', handleMouseUp);
+      docElement.removeEventListener('mouseenter', handleMouseEnter);
     };
 
-    body.addEventListener('mousemove', handleMouseMoveOrLeave);
-    body.addEventListener('mouseleave', handleMouseMoveOrLeave);
-    body.addEventListener('mouseup', handleMouseUp);
-    body.addEventListener('mouseenter', handleMouseEnter);
+    docElement.addEventListener('mousemove', handleMouseMove);
+    docElement.addEventListener('mouseleave', handleMouseLeave);
+    docElement.addEventListener('mouseup', handleMouseUp);
+    docElement.addEventListener('mouseenter', handleMouseEnter);
 
     this.startX = downEvent.clientX - overlayElement.getBoundingClientRect().left;
     const chosenTime = pixelsToSeconds(this.startX, this.samplesPerPixel, this.sampleRate);
