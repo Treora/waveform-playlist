@@ -37,6 +37,7 @@ export function init(options = {}, ee = EventEmitter()) {
     zoomLevels: [512, 1024, 2048, 4096],
     annotationList: {
       annotations: [],
+      annotationFormat: 'aeneas',
       controls: [],
       editable: false,
       linkEndpoints: false,

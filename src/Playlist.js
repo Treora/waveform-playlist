@@ -146,6 +146,7 @@ export default class {
     this.annotationList = new AnnotationList(
       this,
       config.annotations,
+      config.annotationFormat,
       config.controls,
       config.editable,
       config.linkEndpoints,

@@ -7,15 +7,26 @@ import DragInteraction from '../interaction/DragInteraction';
 import ScrollTopHook from './render/ScrollTopHook';
 import timeformat from '../utils/timeformat';
 
+const annotationConverters = {
+  'aeneas': { input: inputAeneas, output: outputAeneas },
+}
+
 class AnnotationList {
-  constructor(playlist, annotations, controls = [], editable = false,
+  constructor(playlist, annotations, annotationFormat, controls = [], editable = false,
     linkEndpoints = false, isContinuousPlay = false) {
     this.playlist = playlist;
     this.resizeHandlers = [];
     this.editable = editable;
-    this.annotations = annotations.map(a =>
-      // TODO support different formats later on.
-      inputAeneas(a),
+
+    const converters = annotationConverters[annotationFormat];
+    if (converters === undefined) {
+      throw new Error(`Unknown annotation format ${annotationFormat}`);
+    }
+    this.inputAnnotation = converters.input;
+    this.outputAnnotation = converters.output;
+
+    this.annotations = annotations.map(annotation =>
+      this.inputAnnotation(annotation),
     );
     this.setupInteractions();
 
@@ -109,7 +120,7 @@ class AnnotationList {
   }
 
   export() {
-    const output = this.annotations.map(a => outputAeneas(a));
+    const output = this.annotations.map(a => this.outputAnnotation(a));
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(output))}`;
     const a = document.createElement('a');
 
