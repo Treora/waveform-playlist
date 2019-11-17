@@ -9,6 +9,7 @@ import timeformat from '../utils/timeformat';
 
 const annotationConverters = {
   'aeneas': { input: inputAeneas, output: outputAeneas },
+  'raw': { input: a => a, output: a => a },
 }
 
 class AnnotationList {
@@ -195,7 +196,7 @@ class AnnotationList {
         let left = note.start * pixPerSec - pixOffset;
         let className;
         let width;
-        if (note.end !== 0) {
+        if (note.end !== undefined && note.end !== 0 && note.end !== note.start) {
           className = '.segment-annotation';
           width = note.end * pixPerSec - note.start * pixPerSec;
         } else {
@@ -203,13 +204,15 @@ class AnnotationList {
           width = 30;
           left -= 15;
         }
+        const element = note.elementType || 'div';
 
-        return h(`div.annotation-box${className}`,
+        return h(`${element}.annotation-box${className}`,
           {
             attributes: {
               style: `position: absolute; height: 30px; width: ${width}px; left: ${left}px`,
               'data-id': note.id,
             },
+            ...note.elementAttributes,
           },
           [
             this.renderResizeLeft(i),
