@@ -175,16 +175,8 @@ export default class {
     });
 
     ee.on('select', (start, end, track) => {
-      if (this.isPlaying()) {
-        this.lastSeeked = start;
-        this.pausedAt = undefined;
-        this.restartPlayFrom(start);
-      } else {
-        // reset if it was paused.
-        this.seek(start, end, track);
-        this.ee.emit('timeupdate', start);
-        this.drawRequest();
-      }
+      this.setTimeSelection(start, end);
+      this.seek(start, end, track);
     });
 
     ee.on('startaudiorendering', (type) => {
@@ -721,6 +713,7 @@ export default class {
       this.duration = 0;
       this.scrollLeft = 0;
 
+      this.setTimeSelection(0, 0);
       this.seek(0, 0, undefined);
     });
   }
@@ -760,10 +753,11 @@ export default class {
       // reset if it was paused.
       this.setActiveTrack(track || this.tracks[0]);
       this.pausedAt = start;
-      this.setTimeSelection(start, end);
       if (this.getSeekStyle() === 'fill') {
         this.playbackSeconds = start;
       }
+      this.ee.emit('timeupdate', start);
+      this.drawRequest();
     }
   }
 
