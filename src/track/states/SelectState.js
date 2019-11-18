@@ -1,4 +1,3 @@
-import _clamp from 'lodash.clamp';
 import { pixelsToSeconds } from '../../utils/conversions';
 
 export default class {
@@ -14,10 +13,8 @@ export default class {
   emitSelection(x) {
     const minX = Math.min(x, this.startX);
     const maxX = Math.max(x, this.startX);
-    const chosenStartTime = pixelsToSeconds(minX, this.samplesPerPixel, this.sampleRate);
-    const startTime = _clamp(chosenStartTime, this.track.getStartTime(), this.track.getEndTime());
-    const chosenEndTime = pixelsToSeconds(maxX, this.samplesPerPixel, this.sampleRate);
-    const endTime = _clamp(chosenEndTime, this.track.getStartTime(), this.track.getEndTime());
+    const startTime = pixelsToSeconds(minX, this.samplesPerPixel, this.sampleRate);
+    const endTime = pixelsToSeconds(maxX, this.samplesPerPixel, this.sampleRate);
 
     this.track.ee.emit('select', startTime, endTime, this.track);
   }
@@ -85,8 +82,7 @@ export default class {
     docElement.addEventListener('mouseenter', handleMouseEnter);
 
     this.startX = downEvent.clientX - overlayElement.getBoundingClientRect().left;
-    const chosenTime = pixelsToSeconds(this.startX, this.samplesPerPixel, this.sampleRate);
-    const startTime = _clamp(chosenTime, this.track.getStartTime(), this.track.getEndTime());
+    const startTime = pixelsToSeconds(this.startX, this.samplesPerPixel, this.sampleRate);
 
     this.track.ee.emit('select', startTime, startTime, this.track);
   }

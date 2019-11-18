@@ -1,3 +1,4 @@
+import _clamp from 'lodash.clamp';
 import _defaults from 'lodash.defaults';
 
 import h from 'virtual-dom/h';
@@ -174,7 +175,9 @@ export default class {
       this.drawRequest();
     });
 
-    ee.on('select', (start, end, track) => {
+    ee.on('select', (chosenStart, chosenEnd, track) => {
+      const start = (chosenStart !== undefined) ? _clamp(chosenStart, 0, this.duration) : undefined;
+      const end = (chosenEnd !== undefined) ? _clamp(chosenEnd, 0, this.duration) : undefined;
       this.setTimeSelection(start, end);
       this.seek(start, end, track);
     });
