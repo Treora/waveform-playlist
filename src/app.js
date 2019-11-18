@@ -1,4 +1,4 @@
-import _assign from 'lodash.assign';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import createElement from 'virtual-dom/create-element';
 import EventEmitter from 'event-emitter';
 import Playlist from './Playlist';
@@ -46,7 +46,7 @@ export function init(options = {}, ee = EventEmitter()) {
     isAutomaticScroll: false,
   };
 
-  const config = _assign(defaults, options);
+  const config = _defaultsDeep(options, defaults);
   const zoomIndex = config.zoomLevels.indexOf(config.samplesPerPixel);
 
   if (zoomIndex === -1) {
