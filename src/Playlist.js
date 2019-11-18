@@ -593,7 +593,11 @@ export default class {
   *   returns the current point of time in the playlist in seconds.
   */
   getCurrentTime() {
-    const cursorPos = this.lastSeeked || this.pausedAt || this.cursor;
+    const cursorPos = (this.lastSeeked !== undefined)
+      ? this.lastSeeked
+      : (this.pausedAt !== undefined)
+        ? this.pausedAt
+        : this.cursor;
 
     return cursorPos + this.getElapsedTime();
   }
@@ -623,10 +627,14 @@ export default class {
     const selected = this.getTimeSelection();
     const playoutPromises = [];
 
-    const start = startTime || this.pausedAt || this.cursor;
+    const start = (startTime !== undefined)
+      ? startTime
+      : (this.pausedAt !== undefined)
+        ? this.pausedAt
+        : this.cursor;
     let end = endTime;
 
-    if (!end && selected.end !== selected.start && selected.end > start) {
+    if (end === undefined && selected.end !== selected.start && selected.end > start) {
       end = selected.end;
     }
 
@@ -766,7 +774,7 @@ export default class {
   updateEditor(cursor) {
     const currentTime = this.ac.currentTime;
     const selection = this.getTimeSelection();
-    const cursorPos = cursor || this.cursor;
+    const cursorPos = (cursor !== undefined) ? cursor : this.cursor;
     const elapsed = currentTime - this.lastDraw;
 
     if (this.isPlaying()) {

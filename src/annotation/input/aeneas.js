@@ -14,7 +14,7 @@ import uuid from 'uuid';
 
 export default function (aeneas) {
   const annotation = {
-    id: aeneas.id || uuid.v4(),
+    id: (aeneas.id !== undefined) ? aeneas.id : uuid.v4(),
     start: Number(aeneas.begin) || 0,
     end: Number(aeneas.end) || 0,
     lines: aeneas.lines || [''],
